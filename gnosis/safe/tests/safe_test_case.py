@@ -24,6 +24,7 @@ from gnosis.eth.contracts import (
     get_simulate_tx_accessor_V1_4_1_contract,
 )
 from gnosis.eth.tests.ethereum_test_case import EthereumTestCaseMixin
+from gnosis.eth.tests.utils import send_tx
 from gnosis.eth.utils import get_empty_tx_params
 from gnosis.safe import Safe
 from gnosis.safe.multi_send import MultiSend
@@ -184,7 +185,11 @@ class SafeTestCaseMixin(EthereumTestCaseMixin):
         raw_tx = HexBytes(
             "0xf8a78085174876e800830186a08080b853604580600e600039806000f350fe7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe03601600081602082378035828234f58015156039578182fd5b8082525050506014600cf3820a96a0460c6ea9b8f791e5d9e67fbf2c70aba92bf88591c39ac3747ea1bedc2ef1750ca04b08a4b5cea15a56276513da7a0c0b34f16e89811d5dd911efba5f8625a921cc"
         )
-        self.send_ether(SAFE_SINGLETON_FACTORY_DEPLOYER_ADDRESS, 10000000000000000)
+        send_tx(
+            self.w3,
+            {"to": SAFE_SINGLETON_FACTORY_DEPLOYER_ADDRESS, "value": 10000000000000000},
+            self.ethereum_test_account,
+        )
         tx_hash = self.ethereum_client.send_raw_transaction(raw_tx)
         tx_receipt = self.ethereum_client.get_transaction_receipt(tx_hash, timeout=30)
         assert tx_receipt["status"] == 1
