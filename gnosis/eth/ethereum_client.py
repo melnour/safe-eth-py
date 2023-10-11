@@ -73,6 +73,7 @@ from .ethereum_network import EthereumNetwork, EthereumNetworkNotSupported
 from .exceptions import (
     BatchCallFunctionFailed,
     ChainIdIsRequired,
+    ContractAlreadyDeployed,
     FromAddressNotFound,
     GasLimitExceeded,
     InsufficientFunds,
@@ -1488,7 +1489,7 @@ class EthereumClient:
                         SAFE_SINGLETON_FACTORY_ADDRESS, salt, data
                     )
                     if self.is_contract(contract_address):
-                        raise ValueError(
+                        raise ContractAlreadyDeployed(
                             f"Contract {contract_address} already deployed"
                         )
 
